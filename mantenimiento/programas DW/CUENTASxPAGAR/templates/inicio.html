@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Desplegable</title>
+  <link rel="stylesheet" href="static/css/styles.css">
+</head>
+
+<body>
+
+  <header class="header">
+
+    <div class="logo">Menu</div>
+
+    <input type="checkbox" id="toggle">
+    <label for="toggle"><img src="" alt="Menu"></label>
+
+    <nav class="navigation">
+
+      {{men | safe}}
+    </nav>
+  </header>
+
+  <iframe name="myFrame" id="myFrame" frameborder="0" width="900px;" min height="100%" style="margin-top:80px;"  ></iframe>
+
+
+</body>
+
+</html>

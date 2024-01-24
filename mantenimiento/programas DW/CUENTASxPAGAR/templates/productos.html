@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Productos</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+
+
+    <main style="padding:10px;">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm">
+                    <form action="/AgregarProductos" method="post">
+                        <h5 style="padding: 6px;">Formulario Productos</h5>
+                        <input type="hidden" id="id1" name="id1" value="0">
+                        <input type="hidden" id="llega" name="llega" value="">
+                        <div class="mb-3">
+                            <label class="form-label">Producto</label>
+                            <input type="text" class="form-control" id="producto" name="producto">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="precio" name="precio">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo Producto</label>
+                            <input type="text" class="form-control" id="tipoproducto" name="tipoproducto">
+                        </div>
+
+                        <button type="submit" id="botonaceptar" value="aceptar" class="btn btn-primary">Aceptar</button>
+                        <button type="submit" id="botonactualizar" value="modificar"
+                            class="btn btn-primary">Modificar</button>
+                    </form>
+                </div>
+
+                <div class="col-sm">
+                    <div class="tabla container-fluid">
+                        <h5> Productos Mantenimientos </h5>
+                        <div class="table-responsive">
+                            <table class="table  
+                table-dark
+                table-borderless
+                align-middle">
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Producto</th>
+                                        <th>Descripcion</th>
+                                        <th>Precio</th>
+                                        <th>Tipo Producto</th>
+                                        <th>Accion</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody style="cursor: pointer;">
+                                    {% for ver in tabla %}
+                                    <tr class="table-primary">
+
+                                        <td>{{ver.nombre_producto}}</td>
+                                        <td>{{ver.descripcion}}</td>
+                                        <input style="display: none;" type="number" id="tprecio" value="{{ver.precio}}">
+                                        <td>{{ver.precio}}</td>
+                                        <td>{{ver.tipoproducto}}</td>
+
+                                        <td>
+                                            <form action="/eliminarProducto" method="post">
+                                                <input type="hidden" name="idproducto" id="idproducto"
+                                                    value="{{ver.codigo_producto}}">
+                                                <button type="submit" style="cursor: pointer !important;"
+                                                    class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                            <button type="button" id="btnsmod" style="cursor: pointer !important;"
+                                                class="btn btn-danger"
+                                                value="{{ver.codigo_producto}}">Modificar</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+
+                                </tfoot>
+                            </table>
+                            <label>Total</label> <input type="text" name="total" id="total" value="0">
+                            <button>Importar Ex</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </main>
+
+    <footer>
+
+
+        <!-- place footer here -->
+    </footer>
+
+
+
+    <script>
+        let tprecio = document.querySelectorAll("#tprecio");
+        let total = 0;
+
+        tprecio.forEach(item => {
+            console.log(item.value);
+            total += parseFloat(item.value);
+        })
+
+        document.getElementById("total").value = total;
+
+        console.log("Total : " + total);
+
+
+
+
+
+
+        const id1 = document.getElementById("id1");
+        const producto = document.getElementById("producto");
+        const descripcion = document.getElementById("descripcion");
+        const precio = document.getElementById("precio");
+        const tipoproducto = document.getElementById("tipoproducto");
+        let botones = document.querySelectorAll("#btnsmod");
+
+        for (nacho of botones) {
+            nacho.addEventListener("click", function (e) {
+                let id = this.value;
+                axios.get('http://127.0.0.1:8000/api/buscarProducto/<id>', {
+                        params: {
+                            id: id,
+                        }
+                    })
+                    .then(function (response) {
+
+                        producto.value = response.data["nombre_producto"];
+                        descripcion.value = response.data["descripcion"];
+                        precio.value = response.data["precio"];
+                        tipoproducto.value = response.data["tipoproducto"];
+                        id1.value = response.data["codigo_producto"];
+
+                    })
+            })
+        }
+
+
+        const botonaceptar = document.getElementById("botonaceptar");
+        const botonactualizar = document.getElementById("botonactualizar");
+        const llega = document.getElementById("llega");
+        botonaceptar.addEventListener("click", () => {
+            llega.value = "aceptar";
+        })
+        botonactualizar.addEventListener("click", () => {
+            llega.value = "actualizar";
+        })
+    </script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

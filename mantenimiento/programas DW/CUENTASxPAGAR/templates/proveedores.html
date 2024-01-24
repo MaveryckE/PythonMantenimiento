@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Proveedores</title>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+
+
+    <main style="padding:10px;">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm">
+                    <form action="/AgregarProveedor" method="post">
+                        <h5 style="padding: 6px;">Formulario Proveedores</h5>
+                        <input type="hidden" id="id1" name="id1" value="0">
+                        <input type="hidden" id="llega" name="llega" value="">
+                        <div class="mb-3">
+                            <label class="form-label">DPI</label>
+                            <input type="text" class="form-control" id="dpi" name="dpi">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombres</label>
+                            <input type="text" class="form-control" id="nombres" name="nombres">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" name="apellidos">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Correo</label>
+                            <input type="text" class="form-control" id="correo" name="correo">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Direccion</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Telefono</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono">
+                        </div>
+
+
+                        <button type="submit" id="botonaceptar" value="aceptar" class="btn btn-primary">Aceptar</button>
+                        <button type="submit" id="botonactualizar" value="modificar"
+                            class="btn btn-primary">Modificar</button>
+                    </form>
+                </div>
+
+
+
+
+
+
+
+                <div class="col-sm">
+                    <div class="tabla container-fluid">
+                        <h5> Proveedores Mantenimientos </h5>
+                        <div class="table-responsive">
+                            <table class="table  
+                table-dark
+                table-borderless
+                align-middle">
+                                <thead>
+                                    <button id="descargarproveedores">Proveedores</button>
+                                    <tr>
+
+                                        <th>DPI</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>Correo</th>
+                                        <th>Direccion</th>
+                                        <th>telefono</th>
+                                        <th>accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="cursor: pointer;">
+                                    {% for ver in tabla %}
+                                    <tr class="table-primary">
+
+                                        <td>{{ver.dpiproveedor}}</td>
+                                        <td>{{ver.nombreproveedor}}</td>
+                                        <td>{{ver.apellidoproveedor}}</td>
+                                        <td>{{ver.correoproveedor}}</td>
+                                        <td>{{ver.direccion}}</td>
+                                        <td>{{ver.telefono}}</td>
+                                        <td>
+                                            <form action="/eliminarProv" method="post">
+                                                <input type="hidden" name="idproducto" id="idproducto"
+                                                    value="{{ver.codigoproveedor}}">
+                                                <button type="submit" style="cursor: pointer !important;"
+                                                    class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                            <button type="button" id="btnsmod" style="cursor: pointer !important;"
+                                                class="btn btn-danger"
+                                                value="{{ver.codigoproveedor}}">Modificar</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </main>
+
+    <footer>
+
+
+        <!-- place footer here -->
+    </footer>
+
+    <script>
+        const descargarproveedores = document.querySelector("#descargarproveedores");
+        descargarproveedores.addEventListener("click", () => {
+            axios.get('http://127.0.0.1:8000/api/excelProveedores')
+                .then(function (response) {
+                    if (response.status == 200) {
+                        alert("Excel descargado correctamente")
+                    }
+                })
+        });
+
+        let botones = document.querySelectorAll("#btnsmod");
+        const dpi = document.getElementById("dpi");
+        const nombres = document.getElementById("nombres");
+        const apellidos = document.getElementById("apellidos");
+        const correo = document.getElementById("correo");
+        const direccion = document.getElementById("direccion");
+        const telefono = document.getElementById("telefono");
+        const id1 = document.getElementById("id1");
+
+
+        for (nacho of botones) {
+            nacho.addEventListener("click", function (e) {
+                let id = this.value;
+                axios.get('http://127.0.0.1:8000/api/buscarProv/<id>', {
+                        params: {
+                            id: id,
+                        }
+                    })
+                    .then(function (response) {
+
+                        dpi.value = response.data["dpiproveedor"];
+                        nombres.value = response.data["nombreproveedor"];
+                        apellidos.value = response.data["apellidoproveedor"];
+                        correo.value = response.data["correoproveedor"];
+                        direccion.value = response.data["direccion"];
+                        telefono.value = response.data["telefono"];
+                        id1.value = response.data["codigoproveedor"];
+
+                    })
+            })
+        }
+
+        const botonaceptar = document.getElementById("botonaceptar");
+        const botonactualizar = document.getElementById("botonactualizar");
+        const llega = document.getElementById("llega");
+        botonaceptar.addEventListener("click", () => {
+            llega.value = "aceptar";
+        })
+        botonactualizar.addEventListener("click", () => {
+            llega.value = "actualizar";
+        })
+    </script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

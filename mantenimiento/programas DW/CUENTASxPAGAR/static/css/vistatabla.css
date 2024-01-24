@@ -1,0 +1,58 @@
+/* Estilo general de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    
+   
+padding: 0;
+    text-align: center; /* Centra el contenido en la página */
+}
+
+h1 {
+    color: #333; /* Color del título */
+}
+
+/* Estilo de la tabla */
+table {
+    
+   
+width: 80%; /* Ancho de la tabla */
+    margin: 20px auto; /* Centra la tabla horizontalmente */
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Estilo de las filas impares de la tabla */
+tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+/* Estilo de las celdas de la tabla */
+td {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+/* Estilo de las celdas de la primera columna */
+td:first-child {
+    border-left: none;
+}
+
+/* Estilo de las celdas de la última columna */
+td:last-child {
+    border-right: none;
+}

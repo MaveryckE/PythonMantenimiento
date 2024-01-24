@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Libro de Compras</title>
+    <link rel="stylesheet" type="text/css" href="static/css/libros.css">
+</head>
+<body>
+    <h1>Libro de Compras</h1>
+    <table id="tabla-compras">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Proveedor</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se llenarán los datos de la API -->
+        </tbody>
+    </table>
+
+    <script>
+        // Hacer la solicitud a la API y llenar la tabla
+        fetch('/api/libro-de-compras')
+            .then(response => response.json())
+            .then(data => {
+                const tabla = document.getElementById('tabla-compras').getElementsByTagName('tbody')[0];
+                data.forEach(compra => {
+                    const fila = tabla.insertRow();
+                    const celdaFecha = fila.insertCell(0);
+                    const celdaProveedor = fila.insertCell(1);
+                    const celdaDescripcion = fila.insertCell(2);
+                    const celdaMonto = fila.insertCell(3);
+                    celdaFecha.textContent = compra.fecha;
+                    celdaProveedor.textContent = compra.proveedor;
+                    celdaDescripcion.textContent = compra.descripcion;
+                    celdaMonto.textContent = compra.monto;
+                });
+            })
+            .catch(error => console.error('Error al obtener los datos: ', error));
+    </script>
+</body>
+</html>
